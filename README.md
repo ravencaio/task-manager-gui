@@ -1,6 +1,9 @@
+# Credits
+Huge credits to Elanosinho (https://github.com/Elanosinho), the original author of this project, all functions from task_module belong to him
+
 # Task Manager
 Task tracker project from https://roadmap.sh/projects/task-tracker
-Huge credits to Elanosinho (https://github.com/Elanosinho), the original author of this project, all functions from task_module belong to him
+
 
 ## Usage
 
