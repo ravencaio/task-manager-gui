@@ -2,8 +2,15 @@
 Functions and variables for taskmanager.py
 """
 
+import os
 import json
 from datetime import datetime
+
+# Files and folders that should be found upon execution
+DEFAULT_DIRECTORY = ('taskmanager.py', 'task_module', 'task_storage', 'README.md', '.git')
+
+# Files and folders from directory that is running the application
+CURRENT_DIRECTORY = os.listdir('.')
 
 # Arguments for "tm list" command
 TM_LIST_ARGS = ['todo', 'in-progress', 'done', '--extend']
@@ -88,13 +95,31 @@ def load_tasks() -> dict:
     """
     Loads tasks.json into a dictionary
     """
-    try:
+    # The directory that runs this application should be the "task-manager" folder, so this shouldn't trigger
+    if not set(DEFAULT_DIRECTORY).issubset(CURRENT_DIRECTORY):
+        choice = input(
+"""Looks like you are either executing this file from an outside directory or have made changes on the main files.
+The former might be a problem, as files could be created outside of the project folder.
+Are you sure you want to continue? [Y/N]: """
+)
+        while choice.upper() not in ('Y', 'N'):
+            choice = input('Invalid input. Try again [Y/N]: ')
+        if choice.upper() == 'N':
+            raise SystemExit('Consult "README.md" file for more information.')
+
+    try: # Creates "tasks.json" file if it doesn't exist
+        with open('task_storage/tasks.json', 'x') as tasks_file:
+            tasks_file.write('{}')
         with open('task_storage/tasks.json', 'r') as tasks_file:
             return json.load(tasks_file)
-    except json.JSONDecodeError: # Triggers when "tasks.json" file is written irregularly
-        raise SystemExit('An error ocurred while decoding the "tasks.json" file. Please consult "README.md" file for more information.')
-    except FileNotFoundError: # Triggers when the script can't find "tasks.json" file
-        raise SystemExit('File "tasks.json" was not found. Please consult "README.md" file for more information')
+    except FileExistsError: # Triggers when the script finds "tasks.json" file
+        try:
+            with open('task_storage/tasks.json', 'r') as tasks_file:
+                return json.load(tasks_file)
+        except json.JSONDecodeError: # Triggers when "tasks.json" file is written irregularly
+            raise SystemExit('An error ocurred while decoding the "tasks.json" file. Please consult "README.md" file for more information.')
+    except FileNotFoundError: # Triggers when "task_storage" is not found
+        raise SystemExit('Unable to find "task_storage" folder. Please consult "README.md" file for more information.')
 
 def update_tasks(task_list, task_id, delete=False) -> None:
     """
@@ -134,7 +159,7 @@ Following are the currently accepted task manager commands:
 
 {"exit - Exits the program":.<80}{'(no arguments)':.>25}
 
-You may type in "tm help command" (no quotes) for more specific information on that command
+You may type in "tm help <command>" (no quotes) for more specific information on that <command>
 """
 
 TM_HELP_DOCS = {
@@ -238,7 +263,7 @@ Removes a task from the task list
 
 tm delete <task_id> -> Removes a task from the task list, given its ID
 
-<task_id> numeric value, ID of task the user wishes to delete
+(mandatory) <task_id> numeric value, ID of task the user wishes to delete
 """,
     'exit':
 """

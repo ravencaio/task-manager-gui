@@ -121,7 +121,7 @@ while True:
                                 empty = False
                                 print(format_task(task), end='\n\n') # Prints task with defined formatting
                         if empty: # Triggers if no task gets printed
-                            print('There are no such tasks')
+                            print('There are no such tasks\n')
 
                 case 'delete': # Removes a task from "task_list"
                     try:

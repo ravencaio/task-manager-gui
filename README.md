@@ -9,7 +9,7 @@ Upon entrance, type ``python taskmanager.py`` or ``py taskmanager.py`` to run th
 Have Fun ^^
 
 ## Commands
-Task Manager is comprised of the following commands:
+Task Manager comprises the following commands:
 * ``help``
 * ``add``
 * ``update``
@@ -24,4 +24,4 @@ Each of these commands should be prefixed by ``tm``, the **T**ask **M**anager co
 *e.g.* ``tm add "Bake a cake"``
 
 ## JSON
-This program uses a single JSON file to store information. If you have any problems with this file, make sure to have it on the ``task_storage`` folder, that its name is ``tasks.json`` and its inner content is a single empty javascript object ``{}``
+This program uses a single JSON file to store information. Make sure to execute this application inside the ``task-manager`` folder, as it will be less prone to errors. Also, be careful when messing directly with the ``tasks.json`` folder, as its inner content can't self-correct.
