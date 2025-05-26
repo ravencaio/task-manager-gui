@@ -4,10 +4,11 @@ Huge credits to Elanosinho (https://github.com/Elanosinho), the original author 
 # Task Manager
 Task tracker project from https://roadmap.sh/projects/task-tracker
 
-# TO DO
+# To-do
 - App theme changer
 - Task "created" and "last updated" show/hide
-
+# Dependencies
+- ttkbootstrap
 
 ## Usage
 
