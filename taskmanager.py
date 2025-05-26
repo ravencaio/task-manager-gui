@@ -69,17 +69,8 @@ def create_task(task_id = task_module.generate_id(task_list), update = False):
        new_task = task_module.create_task(task_id, aname.get())
        task_list[str(task_id)] = new_task
        task_module.update_tasks(task_list, task_id)
-'''FOR REFERENCE:             T1 - Task and task id label
-                              T2 - Task description label
-                              T3 - Task "created" and "last updated" label
-                              T4 - Task "status" text label
-                              T5 - Task actual status label
-                              B1 - Task "done" status set button
-                              B2 - Task "in progress" status set button
-                              B3 - Task "to do" status set button
-                              B4 - Task exclusion button
-                              B5 - Task edit button
-'''                              
+
+
     t1 = ttk.Label(app, text=f'Task {task_list[str(task_id)]['id']} - ', font=('arial', 10))
     t2 = ttk.Label(app, text=task_list[str(task_id)]['description'], font=('arial', 10))
     t3 = ttk.Label(app, text=f'- created: {task_list[str(task_id)]['created']} last updated: {task_list[str(task_id)]['last updated']} ', font=('arial', 10))
@@ -89,7 +80,18 @@ def create_task(task_id = task_module.generate_id(task_list), update = False):
     b2 = ttk.Button(app, text='IN PROGRESS', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'in progress'))
     b3 = ttk.Button(app, text='TO DO', bootstyle='warning', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'to do'))
     b4 = ttk.Button(app, text='X', bootstyle='danger', command=lambda j=task_list[str(task_id)]['id']:[delete_task(j), print(t1_stash.keys())])
-    b5 = ttk.Button(app, text='🖊️', command=lambda j = task_list[str(task_id)]['id']:task_update_interface(j))  
+    b5 = ttk.Button(app, text='🖊️', command=lambda j = task_list[str(task_id)]['id']:task_update_interface(j)) 
+    
+    '''FOR REFERENCE:         T1 - Task and task id label
+                              T2 - Task description label
+                              T3 - Task "created" and "last updated" label
+                              T4 - Task "status" text label
+                              T5 - Task actual status label
+                              B1 - Task "done" status set button
+                              B2 - Task "in progress" status set button
+                              B3 - Task "to do" status set button
+                              B4 - Task exclusion button
+                              B5 - Task edit button'''
 
     t1_stash[f'{task_list[str(task_id)]['id']}'] = t1        # Store labels and buttons on each stash
     t2_stash[f'{task_list[str(task_id)]['id']}'] = t2
