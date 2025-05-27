@@ -6,7 +6,6 @@ Task tracker project from https://roadmap.sh/projects/task-tracker
 
 # To-do
 - App theme changer
-- Task "created" and "last updated" show/hide
 # Dependencies
 - ttkbootstrap
 
