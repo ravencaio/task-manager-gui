@@ -1,18 +1,21 @@
 import task_module 
-import ttkbootstrap as ttk
+import ttkbootstrap as ttk                                   
 from ttkbootstrap.constants import *
 from ttkbootstrap.style import Style
 
-app = ttk.Window('Task Manager')                                                   
-style = Style('solar')               # Theme and app style, change this to change app's theme
-
 # Loads tasks.json into variable
 task_list = task_module.load_tasks()
+settings = task_module.load_settings()
+
+app = ttk.Window('Task Manager')                                                   
+style = Style(settings["theme"])               # Theme and app style, change this to change app's theme
+
+
+
 
 def task_update_status(task_id, status):        # Function used to update task status
     task_list[str(task_id)]['status'] = status
     task_module.update_tasks(task_list, task_id)
-    print(f'atualizou task {task_id} com status de {status}')
     t5_stash[str(task_id)].config(text=f' {status}')
 
 def change_name(task_id):                 # Function used to change task's name
@@ -33,10 +36,7 @@ def task_update_interface(task_id):
     eu1.grid(row=0, column=1)
     bu1.grid(row=0, column=2)
 
-def delete_task(task_id):                               # Deletes a task based on it's id and refreshes the interface
-    del task_list[str(task_id)]
-    task_module.update_tasks(task_list, task_id, delete=True)
-
+def refresh():                     # Function for refreshing the app window
     for task in t1_stash.keys():
         t1_stash[str(task)].destroy()
         t2_stash[str(task)].destroy()
@@ -48,8 +48,7 @@ def delete_task(task_id):                               # Deletes a task based o
         b3_stash[str(task)].destroy()
         b4_stash[str(task)].destroy()
         b5_stash[str(task)].destroy()
-    
-    
+
     t1_stash.clear()
     t2_stash.clear()
     t3_stash.clear()
@@ -63,23 +62,32 @@ def delete_task(task_id):                               # Deletes a task based o
 
     show_task()
 
+
+def delete_task(task_id):                               # Deletes a task based on it's id and refreshes the interface
+    del task_list[str(task_id)]
+    task_module.update_tasks(task_list, task_id, delete=True)
+
+    refresh()
+    
+
+
 def create_task(task_id = task_module.generate_id(task_list), update = False):
+    settings = task_module.load_settings()
     if update:
        task_id = task_module.generate_id(task_list)                   # Function that creates tasks on the app's window, if update is set it updates the JSON database.
        new_task = task_module.create_task(task_id, aname.get())
        task_list[str(task_id)] = new_task
        task_module.update_tasks(task_list, task_id)
 
-
     t1 = ttk.Label(app, text=f'Task {task_list[str(task_id)]['id']} - ', font=('arial', 10))
     t2 = ttk.Label(app, text=task_list[str(task_id)]['description'], font=('arial', 10))
-    t3 = ttk.Label(app, text=f'- created: {task_list[str(task_id)]['created']} last updated: {task_list[str(task_id)]['last updated']} ', font=('arial', 10))
+    t3 = ttk.Label(app, text=f'|| created: {task_list[str(task_id)]['created']} last updated: {task_list[str(task_id)]['last updated']} ||', font=('arial', 10))
     t4 = ttk.Label(app, text=f'status:', font=('arial', 10))
     t5 = ttk.Label(app, text=f' {task_list[str(task_id)]['status']}', font=('arial', 10))
     b1 = ttk.Button(app, text='DONE', bootstyle='success', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'done'))
     b2 = ttk.Button(app, text='IN PROGRESS', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'in progress'))
     b3 = ttk.Button(app, text='TO DO', bootstyle='warning', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'to do'))
-    b4 = ttk.Button(app, text='X', bootstyle='danger', command=lambda j=task_list[str(task_id)]['id']:[delete_task(j), print(t1_stash.keys())])
+    b4 = ttk.Button(app, text='X', bootstyle='danger', command=lambda j=task_list[str(task_id)]['id']:delete_task(j))
     b5 = ttk.Button(app, text='🖊️', command=lambda j = task_list[str(task_id)]['id']:task_update_interface(j)) 
     
     '''FOR REFERENCE:         T1 - Task and task id label
@@ -117,12 +125,16 @@ def create_task(task_id = task_module.generate_id(task_list), update = False):
     b4.grid(row=row, column=9, sticky=E)
     b5.grid(row=row, column=8, sticky=E)
     b6.grid(row=row+1, column= 1)
+    b7.grid(row= row+1, column= 2)
+    if settings['show'] == 0:
+        hide_dates()
 
 def show_task():                            # Function for creating tasks on the app's window
     for task in task_list.values():     
         create_task(task_id=task['id'])
 
 def add_interface():      # Function for the "NEW TASK" button interface
+    row = len(t1_stash) + 1
     global aname
     aname = ttk.StringVar()         
     create = ttk.Toplevel('Create a new task')
@@ -134,6 +146,31 @@ def add_interface():      # Function for the "NEW TASK" button interface
     ec1.grid(row=0, column=1)
     bc1.grid(row=0, column=2)
 
+def hide_dates():    # Function for hiding the T3 label
+    for label in t3_stash.values():
+        label.grid_forget()
+        b7.grid(row= len(t1_stash)+2, column= 3)
+
+def show_hide():        # Function for "SHOW/HIDE" button
+    settings = task_module.load_settings()
+    theme = settings['theme']
+    if settings['show'] == 0:
+        for label in t3_stash.values():
+            for c in range(len(t1_stash.values())):
+                label.grid(row= c, column= 2)
+            new ={
+                "theme" : theme,
+                "show" : 1
+            }
+            task_module.update_settings(new)
+        refresh()
+    if settings['show'] == 1:
+            hide_dates()
+            new = {
+                "theme" : theme,
+                "show" : 0
+                   }
+            task_module.update_settings(new)
 
 t1_stash = {}          # Label and button stashes for storing each label and button individually
 t2_stash = {}
@@ -146,12 +183,11 @@ b3_stash = {}
 b4_stash = {}
 b5_stash = {}
 
-row = len(t1_stash.keys())+1
 b6 = ttk.Button(app, text='NEW TASK', bootstyle='success', command=lambda:add_interface(), width= 25)            # B6 - "NEW TASK" Button
-b6.grid(row=row+1, column= 1)
+
+b7 = ttk.Button(app, text='SHOW/HIDE', bootstyle='light', command=show_hide)    # B7 - "SHOW/HIDE" Button
 
 show_task()
-    
 
 app.resizable(width=False, height=False)
 app.mainloop()
