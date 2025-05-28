@@ -102,7 +102,7 @@ def load_tasks() -> dict:
 
     except FileNotFoundError: # Triggers when the script can't find "tasks.json" file
         dir = 'task_storage'
-        if os.path.isdir(dir) == False:
+        if not os.path.isdir(dir):
             os.mkdir(dir)
         null = {}
         with open('task_storage/tasks.json', 'w') as tasks_file:
@@ -120,7 +120,8 @@ def load_settings() -> dict:
     except json.JSONDecodeError: # Triggers when "tasks.json" file is written irregularly
         os.remove('task_storage/settings.json')
         settings = {
-            "theme" : "cyborg"
+            "theme" : "cyborg",
+            "show" : 1
         }
         with open('task_storage/settings.json', 'w') as tasks_settings:
             json.dump(settings, tasks_settings)
@@ -129,10 +130,11 @@ def load_settings() -> dict:
 
     except FileNotFoundError: # Triggers when the script can't find "tasks.json" file
         dir = 'task_storage'
-        if os.path.isdir(dir) == False:
+        if not os.path.isdir(dir):
             os.mkdir(dir)
         settings = {
-            "theme" : "cyborg"
+            "theme" : "cyborg",
+            "show" : 1
         }
         with open('task_storage/settings.json', 'w') as tasks_settings:
             json.dump(settings, tasks_settings)
