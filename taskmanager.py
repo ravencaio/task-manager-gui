@@ -72,7 +72,6 @@ def delete_task(task_id):                               # Deletes a task based o
 
 
 def create_task(task_id = task_module.generate_id(task_list), update = False):
-    print('criear')
     settings = task_module.load_settings()
     if update:
        task_id = task_module.generate_id(task_list)                   # Function that creates tasks on the app's window, if update is set it updates the JSON database.
