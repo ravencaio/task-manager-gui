@@ -70,7 +70,6 @@ def delete_task(task_id):                               # Deletes a task based o
     refresh()
     
 
-
 def create_task(task_id = task_module.generate_id(task_list), update = False):
     settings = task_module.load_settings()
     if update:
@@ -127,6 +126,7 @@ def create_task(task_id = task_module.generate_id(task_list), update = False):
     b6.grid(row=row+1, column= 1)
     b7.grid(row= row+1, column= 2)
     if settings['show'] == 0:
+        b7.config(text='SHOW')
         hide_dates()
 
 def show_task():                            # Function for creating tasks on the app's window
@@ -138,12 +138,15 @@ def show_task():                            # Function for creating tasks on the
 
 def add_interface():      # Function for the "NEW TASK" button interface
     row = len(t1_stash) + 1
+
+    b6.config(state=DISABLED)
+
     global aname
     aname = ttk.StringVar()         
     create = ttk.Toplevel('Create a new task')
     lc1 = ttk.Label(create, text='Name: ', font=('arial', 10))
     ec1 = ttk.Entry(create, textvariable=aname, font=('arial', 10))
-    bc1 = ttk.Button(create, text='✓', bootstyle='success', command=lambda:[create_task(row, update=True), create.destroy()])
+    bc1 = ttk.Button(create, text='✓', bootstyle='success', command=lambda:[create_task(row, update=True), b6.config(state=NORMAL), create.destroy()])
 
     lc1.grid(row=0,column=0,sticky=W)
     ec1.grid(row=0, column=1)
@@ -162,19 +165,22 @@ def show_hide():
         for label in t3_stash.values():
             for c in range(len(t1_stash.values())):
                 label.grid(row= c, column= 2)
-            new ={
+        new ={
                 "theme" : theme,
                 "show" : 1
-            }
-            task_module.update_settings(new)
+        }
+        b7.config(text='HIDE')
+        task_module.update_settings(new)
+        
         refresh()
     if settings['show'] == 1:
-            hide_dates()
-            new = {
-                "theme" : theme,
-                "show" : 0
-                   }
-            task_module.update_settings(new)
+        hide_dates()
+        new = {
+            "theme" : theme,
+            "show" : 0
+                }
+        b7.config(text='SHOW')
+        task_module.update_settings(new)
 
 t1_stash = {}          # Label and button stashes for storing each label and button individually
 t2_stash = {}
@@ -189,7 +195,7 @@ b5_stash = {}
 
 
 b6 = ttk.Button(app, text='NEW TASK', bootstyle='success', command=lambda:add_interface(), width= 25)            # B6 - "NEW TASK" Button
-b7 = ttk.Button(app, text='SHOW/HIDE', bootstyle='light', command=show_hide)
+b7 = ttk.Button(app, text='HIDE', bootstyle='light', command=show_hide)
 
 show_task()
 
