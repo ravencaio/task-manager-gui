@@ -36,7 +36,7 @@ def task_update_interface(task_id):
     eu1.grid(row=0, column=1)
     bu1.grid(row=0, column=2)
 
-def refresh():                     # Function for refreshing the app window
+def refresh():
     for task in t1_stash.keys():
         t1_stash[str(task)].destroy()
         t2_stash[str(task)].destroy()
@@ -72,6 +72,7 @@ def delete_task(task_id):                               # Deletes a task based o
 
 
 def create_task(task_id = task_module.generate_id(task_list), update = False):
+    print('criear')
     settings = task_module.load_settings()
     if update:
        task_id = task_module.generate_id(task_list)                   # Function that creates tasks on the app's window, if update is set it updates the JSON database.
@@ -132,6 +133,9 @@ def create_task(task_id = task_module.generate_id(task_list), update = False):
 def show_task():                            # Function for creating tasks on the app's window
     for task in task_list.values():     
         create_task(task_id=task['id'])
+    if task_list == {}:
+        b6.grid(row=0, column=0)
+        b7.grid(row=0, column=1)
 
 def add_interface():      # Function for the "NEW TASK" button interface
     row = len(t1_stash) + 1
@@ -146,12 +150,13 @@ def add_interface():      # Function for the "NEW TASK" button interface
     ec1.grid(row=0, column=1)
     bc1.grid(row=0, column=2)
 
-def hide_dates():    # Function for hiding the T3 label
+def hide_dates():
     for label in t3_stash.values():
         label.grid_forget()
         b7.grid(row= len(t1_stash)+2, column= 3)
 
-def show_hide():        # Function for "SHOW/HIDE" button
+
+def show_hide():
     settings = task_module.load_settings()
     theme = settings['theme']
     if settings['show'] == 0:
@@ -183,9 +188,9 @@ b3_stash = {}
 b4_stash = {}
 b5_stash = {}
 
-b6 = ttk.Button(app, text='NEW TASK', bootstyle='success', command=lambda:add_interface(), width= 25)            # B6 - "NEW TASK" Button
 
-b7 = ttk.Button(app, text='SHOW/HIDE', bootstyle='light', command=show_hide)    # B7 - "SHOW/HIDE" Button
+b6 = ttk.Button(app, text='NEW TASK', bootstyle='success', command=lambda:add_interface(), width= 25)            # B6 - "NEW TASK" Button
+b7 = ttk.Button(app, text='SHOW/HIDE', bootstyle='light', command=show_hide)
 
 show_task()
 
