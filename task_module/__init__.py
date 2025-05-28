@@ -93,7 +93,13 @@ def load_tasks() -> dict:
         with open('task_storage/tasks.json', 'r') as tasks_file:
             return json.load(tasks_file)
     except json.JSONDecodeError: # Triggers when "tasks.json" file is written irregularly
-        raise SystemExit('An error ocurred while decoding the "tasks.json" file. Please consult "README.md" file for more information.')
+        os.remove('task_storage/tasks.json')
+        null = {}
+        with open('task_storage/tasks.json', 'w') as tasks_file:
+            json.dump(null, tasks_file)
+        with open('task_storage/tasks.json', 'r') as tasks_file:
+            return json.load(tasks_file)
+
     except FileNotFoundError: # Triggers when the script can't find "tasks.json" file
         dir = 'task_storage'
         if os.path.isdir(dir) == False:
@@ -104,6 +110,35 @@ def load_tasks() -> dict:
         with open('task_storage/tasks.json', 'r') as tasks_file:
             return json.load(tasks_file)
 
+def load_settings() -> dict:
+    '''
+    Loads settings.json into a dictionary    
+    '''
+    try:
+        with open('task_storage/settings.json', 'r') as tasks_settings:
+            return json.load(tasks_settings)
+    except json.JSONDecodeError: # Triggers when "tasks.json" file is written irregularly
+        os.remove('task_storage/settings.json')
+        settings = {
+            "theme" : "cyborg"
+        }
+        with open('task_storage/settings.json', 'w') as tasks_settings:
+            json.dump(settings, tasks_settings)
+        with open('task_storage/settings.json', 'r') as tasks_settings:
+            return json.load(tasks_settings)
+
+    except FileNotFoundError: # Triggers when the script can't find "tasks.json" file
+        dir = 'task_storage'
+        if os.path.isdir(dir) == False:
+            os.mkdir(dir)
+        settings = {
+            "theme" : "cyborg"
+        }
+        with open('task_storage/settings.json', 'w') as tasks_settings:
+            json.dump(settings, tasks_settings)
+        with open('task_storage/settings.json', 'r') as tasks_settings:
+            return json.load(tasks_settings)
+
 def update_tasks(task_list, task_id, delete=False) -> None:
     """
     Updates the tasks.json file
@@ -112,6 +147,10 @@ def update_tasks(task_list, task_id, delete=False) -> None:
         if not delete: # Updates 'last updated' key of task if you won't delete it
             task_list[str(task_id)]['last updated'] = now()
         json.dump(task_list, tasks_file)
+
+def update_settings(new) -> None:
+    with open('task_storage/settings.json', 'w') as settings_file:
+        json.dump(new, settings_file)
 
 # ATTENTION!! BORING ASS DOCUMENTATION AHEAD
 
