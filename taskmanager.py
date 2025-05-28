@@ -7,8 +7,7 @@ from ttkbootstrap.style import Style
 task_list = task_module.load_tasks()
 settings = task_module.load_settings()
 
-app = ttk.Window('Task Manager')                                                   
-style = Style(settings["theme"])               # Theme and app style, change this to change app's theme
+app = ttk.Window('Task Manager', themename=settings['theme'])                 # Theme and app style, change this to change app's theme
 
 
 
@@ -30,11 +29,12 @@ def task_update_interface(task_id):
     tasup = ttk.Toplevel('Change task name')
     lu1 = ttk.Label(tasup, text='Name: ', font=('arial', 10))
     eu1 = ttk.Entry(tasup, textvariable=taskname, font=('arial', 10))
-    bu1 = ttk.Button(tasup, text='✓', bootstyle='success', command=lambda:[tasup.destroy(), change_name(task_id)])
+    bu1 = ttk.Button(tasup, text='✓', bootstyle='success', command=lambda:[change_name(task_id), refresh(), tasup.destroy()])
 
     lu1.grid(row=0,column=0,sticky=W)
     eu1.grid(row=0, column=1)
     bu1.grid(row=0, column=2)
+
 
 def refresh():
     for task in t1_stash.keys():
@@ -68,7 +68,42 @@ def delete_task(task_id):                               # Deletes a task based o
     task_module.update_tasks(task_list, task_id, delete=True)
 
     refresh()
-    
+
+def delete_confirmation(task_id):
+    delwindow = ttk.Toplevel('')
+    b4 = b4_stash[str(task_id)]
+
+    delwindow.protocol('WM_DELETE_WINDOW', func=lambda:[b4.config(state=NORMAL), delwindow.destroy()])
+
+    td1 = ttk.Label(delwindow, text= f'Are you sure you want to delete TASK {task_id}?', font=('arial', 12))
+    bd1 = ttk.Button(delwindow, text='✓', bootstyle='success', command=lambda:[delete_task(task_id), delwindow.destroy()])
+    bd2 = ttk.Button(delwindow, text='X', bootstyle= 'danger', command=lambda:[b4.config(state=NORMAL),delwindow.destroy()])
+
+    b4.config(state= DISABLED)
+
+
+    td1.grid(row=0, column=0, sticky=W)
+    bd1.grid(row=0, column=1)
+    bd2.grid(row=0, column=2)
+
+def add_interface():      # Function for the "NEW TASK" button interface
+    row = len(t1_stash) + 1
+
+    b6.config(state=DISABLED)
+
+    global aname
+    aname = ttk.StringVar()         
+    create = ttk.Toplevel('Create a new task')
+    lc1 = ttk.Label(create, text='Name: ', font=('arial', 10))
+    ec1 = ttk.Entry(create, textvariable=aname, font=('arial', 10))
+    bc1 = ttk.Button(create, text='✓', bootstyle='success', command=lambda:[create_task(row, update=True), b6.config(state=NORMAL), create.destroy()])
+
+    create.protocol('WM_DELETE_WINDOW', func=lambda:[b6.config(state=NORMAL), create.destroy()])
+
+    lc1.grid(row=0,column=0,sticky=W)
+    ec1.grid(row=0, column=1)
+    bc1.grid(row=0, column=2)
+
 
 def create_task(task_id = task_module.generate_id(task_list), update = False):
     settings = task_module.load_settings()
@@ -86,7 +121,7 @@ def create_task(task_id = task_module.generate_id(task_list), update = False):
     b1 = ttk.Button(app, text='DONE', bootstyle='success', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'done'))
     b2 = ttk.Button(app, text='IN PROGRESS', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'in progress'))
     b3 = ttk.Button(app, text='TO DO', bootstyle='warning', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'to do'))
-    b4 = ttk.Button(app, text='X', bootstyle='danger', command=lambda j=task_list[str(task_id)]['id']:delete_task(j))
+    b4 = ttk.Button(app, text='X', bootstyle='danger', command=lambda j=task_list[str(task_id)]['id']:delete_confirmation(j))
     b5 = ttk.Button(app, text='🖊️', command=lambda j = task_list[str(task_id)]['id']:task_update_interface(j)) 
     
     '''FOR REFERENCE:         T1 - Task and task id label
@@ -136,21 +171,6 @@ def show_task():                            # Function for creating tasks on the
         b6.grid(row=0, column=0)
         b7.grid(row=0, column=1)
 
-def add_interface():      # Function for the "NEW TASK" button interface
-    row = len(t1_stash) + 1
-
-    b6.config(state=DISABLED)
-
-    global aname
-    aname = ttk.StringVar()         
-    create = ttk.Toplevel('Create a new task')
-    lc1 = ttk.Label(create, text='Name: ', font=('arial', 10))
-    ec1 = ttk.Entry(create, textvariable=aname, font=('arial', 10))
-    bc1 = ttk.Button(create, text='✓', bootstyle='success', command=lambda:[create_task(row, update=True), b6.config(state=NORMAL), create.destroy()])
-
-    lc1.grid(row=0,column=0,sticky=W)
-    ec1.grid(row=0, column=1)
-    bc1.grid(row=0, column=2)
 
 def hide_dates():
     for label in t3_stash.values():
