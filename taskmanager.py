@@ -24,12 +24,16 @@ def change_name(task_id):                 # Function used to change task's name
     t2_stash[str(task_id)].config(text=task_list[str(task_id)]['description'])
 
 def task_update_interface(task_id):
-    global taskname                     # Creates new window for updating task's name
+    global taskname                    # Creates new window for updating task's name
+    disable_allbuttons()
+
     taskname = ttk.StringVar()
     tasup = ttk.Toplevel('Change task name')
     lu1 = ttk.Label(tasup, text='Name: ', font=('arial', 10))
     eu1 = ttk.Entry(tasup, textvariable=taskname, font=('arial', 10))
-    bu1 = ttk.Button(tasup, text='✓', bootstyle='success', command=lambda:[change_name(task_id), refresh(), tasup.destroy()])
+    bu1 = ttk.Button(tasup, text='✓', bootstyle='success', command=lambda:[change_name(task_id), enable_allbuttons() , refresh(), tasup.destroy()])
+
+    tasup.protocol('WM_DELETE_WINDOW', func=lambda:[enable_allbuttons(), tasup.destroy()])
 
     lu1.grid(row=0,column=0,sticky=W)
     eu1.grid(row=0, column=1)
@@ -69,36 +73,63 @@ def delete_task(task_id):                               # Deletes a task based o
 
     refresh()
 
-def delete_confirmation(task_id):
+def delete_confirmation_interface(task_id):
     delwindow = ttk.Toplevel('')
     b4 = b4_stash[str(task_id)]
 
-    delwindow.protocol('WM_DELETE_WINDOW', func=lambda:[b4.config(state=NORMAL), delwindow.destroy()])
+    delwindow.protocol('WM_DELETE_WINDOW', func=lambda:[enable_allbuttons(), delwindow.destroy()])
 
     td1 = ttk.Label(delwindow, text= f'Are you sure you want to delete TASK {task_id}?', font=('arial', 12))
-    bd1 = ttk.Button(delwindow, text='✓', bootstyle='success', command=lambda:[delete_task(task_id), delwindow.destroy()])
-    bd2 = ttk.Button(delwindow, text='X', bootstyle= 'danger', command=lambda:[b4.config(state=NORMAL),delwindow.destroy()])
+    bd1 = ttk.Button(delwindow, text='✓', bootstyle='success', command=lambda:[delete_task(task_id), enable_allbuttons(), delwindow.destroy()])
+    bd2 = ttk.Button(delwindow, text='X', bootstyle= 'danger', command=lambda:[enable_allbuttons(), delwindow.destroy()])
 
-    b4.config(state= DISABLED)
-
+    disable_allbuttons()
 
     td1.grid(row=0, column=0, sticky=W)
     bd1.grid(row=0, column=1)
     bd2.grid(row=0, column=2)
 
+def enable_allbuttons():
+    for button in b1_stash.values():
+        button.config(state=NORMAL)
+    for button in b2_stash.values():
+        button.config(state=NORMAL)
+    for button in b3_stash.values():
+        button.config(state=NORMAL)
+    for button in b4_stash.values():
+        button.config(state=NORMAL)
+    for button in b5_stash.values():
+        button.config(state=NORMAL)
+    b6.config(state=NORMAL)
+    b7.config(state=NORMAL)
+
+def disable_allbuttons():
+    for button in b1_stash.values():
+        button.config(state=DISABLED)
+    for button in b2_stash.values():
+        button.config(state=DISABLED)
+    for button in b3_stash.values():
+        button.config(state=DISABLED)
+    for button in b4_stash.values():
+        button.config(state=DISABLED)
+    for button in b5_stash.values():
+        button.config(state=DISABLED)
+    b6.config(state=DISABLED)
+    b7.config(state=DISABLED)
+
 def add_interface():      # Function for the "NEW TASK" button interface
     row = len(t1_stash) + 1
 
-    b6.config(state=DISABLED)
+    disable_allbuttons()
 
     global aname
     aname = ttk.StringVar()         
     create = ttk.Toplevel('Create a new task')
     lc1 = ttk.Label(create, text='Name: ', font=('arial', 10))
     ec1 = ttk.Entry(create, textvariable=aname, font=('arial', 10))
-    bc1 = ttk.Button(create, text='✓', bootstyle='success', command=lambda:[create_task(row, update=True), b6.config(state=NORMAL), create.destroy()])
+    bc1 = ttk.Button(create, text='✓', bootstyle='success', command=lambda:[create_task(row, update=True), enable_allbuttons(), create.destroy()])
 
-    create.protocol('WM_DELETE_WINDOW', func=lambda:[b6.config(state=NORMAL), create.destroy()])
+    create.protocol('WM_DELETE_WINDOW', func=lambda:[enable_allbuttons(), create.destroy()])
 
     lc1.grid(row=0,column=0,sticky=W)
     ec1.grid(row=0, column=1)
@@ -121,7 +152,7 @@ def create_task(task_id = task_module.generate_id(task_list), update = False):
     b1 = ttk.Button(app, text='DONE', bootstyle='success', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'done'))
     b2 = ttk.Button(app, text='IN PROGRESS', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'in progress'))
     b3 = ttk.Button(app, text='TO DO', bootstyle='warning', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'to do'))
-    b4 = ttk.Button(app, text='X', bootstyle='danger', command=lambda j=task_list[str(task_id)]['id']:delete_confirmation(j))
+    b4 = ttk.Button(app, text='X', bootstyle='danger', command=lambda j=task_list[str(task_id)]['id']:delete_confirmation_interface(j))
     b5 = ttk.Button(app, text='🖊️', command=lambda j = task_list[str(task_id)]['id']:task_update_interface(j)) 
     
     '''FOR REFERENCE:         T1 - Task and task id label
