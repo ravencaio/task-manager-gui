@@ -6,16 +6,13 @@ Task tracker project from https://roadmap.sh/projects/task-tracker
 
 # To-do
 - App theme changer
-# Dependencies
-- ttkbootstrap
+- Compile to .exe
 
 ## Usage
-
 Run taskmanager.py
 
-
-## JSON
-This program uses a single JSON file to store information. Make sure to execute this application inside the ``task-manager`` folder, as it will be less prone to errors. Also, be careful when messing directly with the ``tasks.json`` folder, as its inner content can't self-correct.
+## Task storage
+This program uses a single JSON file to store information. Make sure to execute this application inside the ``task-manager`` folder, as it will be less prone to errors. Also, be careful when messing directly with the ``tasks.json`` folder, becouse the app can't correct the JSON file itself
 
 
 
