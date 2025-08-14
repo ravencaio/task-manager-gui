@@ -144,11 +144,11 @@ def create_task(task_id = task_module.generate_id(task_list), update = False):
        task_list[str(task_id)] = new_task
        task_module.update_tasks(task_list, task_id)
 
-    t1 = ttk.Label(app, text=f'Task {task_list[str(task_id)]['id']} - ', font=('arial', 10))
+    t1 = ttk.Label(app, text=f'Task {task_list[str(task_id)]["id"]} - ', font=('arial', 10))
     t2 = ttk.Label(app, text=task_list[str(task_id)]['description'], font=('arial', 10))
-    t3 = ttk.Label(app, text=f'|| created: {task_list[str(task_id)]['created']} last updated: {task_list[str(task_id)]['last updated']} ||', font=('arial', 10))
+    t3 = ttk.Label(app, text=f'|| created: {task_list[str(task_id)]["created"]} last updated: {task_list[str(task_id)]["last updated"]} ||', font=('arial', 10))
     t4 = ttk.Label(app, text=f'status:', font=('arial', 10))
-    t5 = ttk.Label(app, text=f' {task_list[str(task_id)]['status']}', font=('arial', 10))
+    t5 = ttk.Label(app, text=f' {task_list[str(task_id)]["status"]}', font=('arial', 10))
     b1 = ttk.Button(app, text='DONE', bootstyle='success', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'done'))
     b2 = ttk.Button(app, text='IN PROGRESS', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'in progress'))
     b3 = ttk.Button(app, text='TO DO', bootstyle='warning', command=lambda j=task_list[str(task_id)]['id']:task_update_status(j, 'to do'))
