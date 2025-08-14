@@ -166,16 +166,16 @@ def create_task(task_id = task_module.generate_id(task_list), update = False):
                               B4 - Task exclusion button
                               B5 - Task edit button'''
 
-    t1_stash[f'{task_list[str(task_id)]['id']}'] = t1        # Store labels and buttons on each stash
-    t2_stash[f'{task_list[str(task_id)]['id']}'] = t2
-    t3_stash[f'{task_list[str(task_id)]['id']}'] = t3
-    t4_stash[f'{task_list[str(task_id)]['id']}'] = t4
-    t5_stash[f'{task_list[str(task_id)]['id']}'] = t5
-    b1_stash[f'{task_list[str(task_id)]['id']}'] = b1                                    
-    b2_stash[f'{task_list[str(task_id)]['id']}'] = b2
-    b3_stash[f'{task_list[str(task_id)]['id']}'] = b3
-    b4_stash[f'{task_list[str(task_id)]['id']}'] = b4
-    b5_stash[f'{task_list[str(task_id)]['id']}'] = b5
+    t1_stash[f'{task_list[str(task_id)]["id"]}'] = t1        # Store labels and buttons on each stash
+    t2_stash[f'{task_list[str(task_id)]["id"]}'] = t2
+    t3_stash[f'{task_list[str(task_id)]["id"]}'] = t3
+    t4_stash[f'{task_list[str(task_id)]["id"]}'] = t4
+    t5_stash[f'{task_list[str(task_id)]["id"]}'] = t5
+    b1_stash[f'{task_list[str(task_id)]["id"]}'] = b1                                    
+    b2_stash[f'{task_list[str(task_id)]["id"]}'] = b2
+    b3_stash[f'{task_list[str(task_id)]["id"]}'] = b3
+    b4_stash[f'{task_list[str(task_id)]["id"]}'] = b4
+    b5_stash[f'{task_list[str(task_id)]["id"]}'] = b5
     
     
     row = len(t1_stash) + 1           # Grid each label and button on app's window
