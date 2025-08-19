@@ -9,7 +9,7 @@ Task tracker project from https://roadmap.sh/projects/task-tracker
 - Compile to .exe
 
 ## Usage
-Install requirements, you can type ``pip install -r requirements.txt`` on your terminal  
+Install requirements; you can type ``pip install -r requirements.txt`` on your terminal to complete this step
 Run ``taskmanager.py``
 
 ## Task storage
