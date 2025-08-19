@@ -7,7 +7,7 @@ from ttkbootstrap.style import Style
 task_list = task_module.load_tasks()
 settings = task_module.load_settings()
 
-app = ttk.Window('Task Manager', themename=settings['theme'])                 # Theme and app style, change this to change app's theme
+app = ttk.Window('Task Tracker', themename=settings['theme'])                 # Theme and app style, change this to change app's theme
 
 
 
@@ -252,3 +252,4 @@ show_task()
 
 app.resizable(width=False, height=False)
 app.mainloop()
+
