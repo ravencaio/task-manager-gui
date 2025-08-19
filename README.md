@@ -2,7 +2,9 @@
 Huge credits to Elanosinho (https://github.com/Elanosinho), the original author of this project, all functions from task_module belong to him
 
 # Task Manager
-Task tracker project from https://roadmap.sh/projects/task-tracker
+Task tracker project from https://roadmap.sh/projects/task-tracker  
+I've made this Task tracker with and accessible GUI using an similar library to Tkinter called Ttkbootstrap.  
+It has all the functions you need, you can create, rename, update completion status and delete your tasks tasks. 
 
 # To-do
 - App theme changer
